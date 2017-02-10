@@ -1,12 +1,15 @@
 package es.iesnervion.ui;
 
+import java.util.concurrent.Semaphore;
+
+import es.iesnervion.ent.Filosofo;
 
 /**
  * Problema de la Cena de Filosofos.
- * El problema de la cena de los filósofos o problema de los filósofos cenando (dining philosophers problem)
- * es un problema clásico de las ciencias de la computación propuesto por Edsger Dijkstra en 1965 para 
- * representar el problema de la sincronización de procesos en un sistema operativo. Cabe aclarar que la 
- * interpretación está basada en pensadores chinos, quienes comían con dos palillos, donde es más lógico que se
+ * El problema de la cena de los filï¿½sofos o problema de los filï¿½sofos cenando (dining philosophers problem)
+ * es un problema clï¿½sico de las ciencias de la computaciï¿½n propuesto por Edsger Dijkstra en 1965 para 
+ * representar el problema de la sincronizaciï¿½n de procesos en un sistema operativo. Cabe aclarar que la 
+ * interpretaciï¿½n estï¿½ basada en pensadores chinos, quienes comï¿½an con dos palillos, donde es mï¿½s lï¿½gico que se
  *  necesite el del comensal que se siente al lado para poder comer.
  *  
  *  <a>https://es.wikipedia.org/wiki/Problema_de_la_cena_de_los_fil%C3%B3sofos</a>
@@ -16,8 +19,25 @@ package es.iesnervion.ui;
  */
 public class Main {
 	private static final int numFilosofos = 5;
+	private static final int[][] palillosFilosofo = {
+			{0, 4},
+			{1, 0},
+			{2,1},
+			{3, 2},
+			{4,3}
+	};
 	
-	public Main() {
+	private static final Semaphore[] palillos_Semaforo = new Semaphore[numFilosofos];
+	
+	
+	public static void main(String[] args) {
 		
+		for (int i = 0; i < numFilosofos; i++) {
+			palillos_Semaforo[i] = new Semaphore(1);
+		}
+		
+		for (int idFilosofo = 0; idFilosofo < numFilosofos; idFilosofo++) {
+			new Filosofo(idFilosofo, palillos_Semaforo, palillosFilosofo).start();
+		}
 	}
 }
