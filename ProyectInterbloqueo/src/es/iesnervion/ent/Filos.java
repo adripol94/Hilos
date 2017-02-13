@@ -50,6 +50,10 @@ public class Filos extends Thread {
 		}
 	}
 
+	/**
+	 * Se ha demostrado practicamente que el tamaño de espera mas amplio indica una mortalidad inferior
+	 */
+	@Deprecated
 	public void pensarComido() {
 		comido = false;
 		
@@ -57,18 +61,21 @@ public class Filos extends Thread {
 		
 		try {
 			//un filosofo tarda entre 100 y 1000 milusengundos
-			sleep(ramdon.nextInt(800) + 500);
+			sleep(ramdon.nextInt(700) + 100);
 		} catch (InterruptedException e) {
 			System.out.println("Ha ocurrido un erro " + e.getMessage());
 		}
 	}
 	
+	/**
+	 * Ha mayor tiempo de espera menor es la concurrencia por tanto menor la probabilidad de mortalidad
+	 */
 	public void pensar() {
 		System.out.println("El filosodo " + idFilosofo + " esta pensando");
 		
 		try {
 			//un filosofo tarda entre 100 y 1000 milusengundos
-			sleep(ramdon.nextInt(1000) + 100);
+			sleep(ramdon.nextInt(1100) + 100);
 		} catch (InterruptedException e) {
 			System.out.println("Ha ocurrido un erro " + e.getMessage());
 		}
