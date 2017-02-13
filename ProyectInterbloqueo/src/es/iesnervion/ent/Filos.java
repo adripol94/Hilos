@@ -18,6 +18,7 @@ public class Filos extends Thread {
 	private int vecesPasadoHambre;
 	private int vecesComido;
 	private boolean comido;
+	private boolean muerto;
 	private final Semaphore[] semaforo;
 	private final int[][] palillosFiloso;
 	private final int palilloDer;
@@ -28,6 +29,7 @@ public class Filos extends Thread {
 	
 	public Filos(int idFilosofo, Semaphore[] semaforo, int[][] palillosFilosofo) {
 		super();
+		muerto = false;
 		this.idFilosofo = idFilosofo;
 		vecesPasadoHambre = 0;
 		comido = false;
@@ -78,6 +80,7 @@ public class Filos extends Thread {
 		vecesComido--;
 		if (vecesPasadoHambre == ESTA_MUERTO) {
 			System.out.println("El filosofo " + idFilosofo + " HA MUERTO!!!!!!**********************************");
+			muerto = true;
 		}
 	
 	}
