@@ -29,7 +29,7 @@ public class Main {
 	
 	private static final Semaphore[] palillos_Semaforo = new Semaphore[numFilosofos];
 	
-	
+	/*
 	public static void main(String[] args) {
 		
 		for (int i = 0; i < numFilosofos; i++) {
@@ -40,4 +40,5 @@ public class Main {
 			new Filosofo(idFilosofo, palillos_Semaforo, palillosFilosofo).start();
 		}
 	}
+	*/
 }

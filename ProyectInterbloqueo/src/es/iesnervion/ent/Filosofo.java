@@ -12,16 +12,6 @@ public class Filosofo extends Thread {
 	private final Random tiempoAleatorio = new Random(); 
 	
 	
-	
-	public Filosofo(int idFilosofo, Semaphore[] semaforo ,int[][] palillosFilosofo, int palilloIzq, int palilloDer) {
-		super();
-		this.idFilosofo = idFilosofo;
-		this.semaforo = semaforo;
-		this.palillosFilosofo = palillosFilosofo;
-		this.palilloIzq = palilloIzq;
-		this.palilloDer = palilloDer;
-	}
-	
 	public Filosofo(int idFilosofo, Semaphore[] semaforo ,int[][] palillosFilosofo) {
 		super();
 		this.idFilosofo = idFilosofo;
