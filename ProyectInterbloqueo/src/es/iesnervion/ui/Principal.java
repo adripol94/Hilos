@@ -7,9 +7,6 @@ import es.iesnervion.ent.Filosofo;
 import es.iesnervion.ent.Respuesta;
 
 public class Principal {
-	
-	private static Respuesta res;
-
 	private static int maxFilosofos = 5;
 	private static int[][] palilloFilosofos = {
 			{0, 4},
