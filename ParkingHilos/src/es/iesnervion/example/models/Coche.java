@@ -19,6 +19,7 @@ public class Coche extends Thread{
 	public void run() {
 		String n;
 		try {
+			//Refinar: Tengo que tener un objeto entrada y en el parking usar dicho arrays de objecto entrada.
 			n = p.entrar(0, id);
 			System.out.println("El coche " + id + " ha ocupado un aparcamiento, total=" + n);
 
