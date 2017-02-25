@@ -3,6 +3,7 @@ package es.iesnervion.example.models;
 import java.util.Random;
 
 import es.iesnervion.example.models.parking.Parking;
+import es.iesnervion.example.ui.Main;
 
 /**
  * Hilo simbolico de coche.
@@ -34,12 +35,13 @@ public class Coche extends Thread{
 	/**
 	 * Numero de puertas de la entrada. Necesario para sacar el numero aleatorio.
 	 */
-	private static final int N_PUERTAS = 2;
+	private static final int N_PUERTAS_ENTRADA = Main.N_BARRERAS_ENTRADA;
 	
 	/**
-	 * Numero de la barrera a usar para la entrada.
+	 * Numero de puertas de salida. Necesario para sacar el numero aleatorio.
 	 */
-	private int barrera;
+	private static final int N_PUERTAS_SALIDA = Main.N_BARRERAS_SALIDA;
+	
 	
 	//Constructor------------------------
 	
@@ -51,7 +53,6 @@ public class Coche extends Thread{
 	public Coche(int id, Parking p) {
 		this.id = id;
 		this.p = p;
-		barrera = elegirPuerta();
 	}
 
 	/**
@@ -64,19 +65,24 @@ public class Coche extends Thread{
 	@Override
 	public void run() {
 		String n;
+		int t, barreraSalida, barreraEntrada;
+		
 		try {
+			barreraEntrada = elegirPuerta(N_PUERTAS_ENTRADA);
 			//Refinar: Tengo que tener un objeto entrada y en el parking usar dicho arrays de objecto entrada.
-			n = p.entrar(barrera, id);
-			System.out.println("El coche " + id + " ha ocupado un aparcamiento, total=" + n + ", ha entrado por la barrera " + barrera);
+			n = p.entrar(barreraEntrada, id);
+			System.out.println("El coche " + id + " ha ocupado un aparcamiento, total=" + n + ", ha entrado por la barrera " + barreraEntrada);
 
-			int t = tiempoEspera();
+			t = tiempoEspera();
 			System.out.println("El coche " + id + " va a esperar el el aparcamiento un total de " + t);
 			sleep(t);
-			n = p.salir(0, id);
 			
-			System.out.println("El coche " + id + " ha salido del aparcamiento, total=" + n);
+			barreraSalida = elegirPuerta(N_PUERTAS_SALIDA);
+			n = p.salir(barreraSalida, id);
+			
+			System.out.println("El coche " + id + " ha salido del aparcamiento por la barrera " + barreraSalida + ", aparcamientos ocupados=" + n);
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -94,9 +100,9 @@ public class Coche extends Thread{
 	 * Devuelve un aleatorio del numero de puerta a usar.
 	 * @return
 	 */
-	private int elegirPuerta() {
+	private int elegirPuerta(int nPuertas) {
 		Random r = new Random();
-		return r.nextInt(((N_PUERTAS-1) - 0) + 1) + 0;
+		return r.nextInt(((nPuertas-1) - 0) + 1) + 0;
 	}
 	
 }

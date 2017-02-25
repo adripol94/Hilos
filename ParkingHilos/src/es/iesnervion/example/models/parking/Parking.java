@@ -8,12 +8,17 @@ import java.util.concurrent.Semaphore;
  *
  */
 public class Parking {
-	private static Semaphore sEntrada;
-	private static Semaphore sSalida;
+	//SIN USO.
+//	@Deprecated
+//	private Semaphore sEntrada;
+//	@Deprecated
+//	private Semaphore sSalida;
+	
+	
 	/**
 	 * Numero de aparcamientos ocupados
 	 */
-	private static int aparcamientosOcupados = 0;
+	protected static int aparcamientosOcupados = 0;
 	/**
 	 * Barreras de entrada.
 	 */
@@ -25,7 +30,7 @@ public class Parking {
 	/**
 	 * Tamaño del parking
 	 */
-	private int sizeParking;
+	protected static int sizeParking;
 	/**
 	 * Contador que usaremos para darles permisos al as barreras de entrada de forma ordenada.
 	 */
@@ -39,10 +44,11 @@ public class Parking {
 	 */
 	public Parking(int sizeParking, int numEntradas, int numSalidas) {
 		//El numero de permisos es el tamaño del parking
-		sEntrada = new Semaphore(sizeParking);
+		//sEntrada = new Semaphore(sizeParking);
 		//Solo 1 porque la salida o se puede usar porque hay un coche o no hay nadie y se usa
-		sSalida = new Semaphore(1);
-		this.sizeParking = sizeParking;
+		//sSalida = new Semaphore(1);
+		
+		Parking.sizeParking = sizeParking;
 		
 		//Contador correspondiente para darles permisos y ordenar las colas de entrada
 		contador = 0;
@@ -51,11 +57,11 @@ public class Parking {
 		
 		entradas = new Entrada[numEntradas];
 		for (int i=0; i < entradas.length; i++)
-			entradas[i] = new Entrada(sEntrada);
+			entradas[i] = new Entrada();
 		
 		salidas = new Salida[numSalidas];
 		for (int i=0; i < salidas.length; i++)
-			salidas[i] = new Salida(sSalida);
+			salidas[i] = new Salida();
 	}
 	
 	/**
@@ -66,18 +72,18 @@ public class Parking {
 	 * @throws Exception En caso de incrementarse {@link #aparcamientosOcupados} mas que {@link #sizeParking}.
 	 * 		   En caso de que {@code barrera > Parking#sEntrada}
 	 */
-	public synchronized String entrar(int barrera, int id) throws Exception {
+	public String entrar(int barrera, int id) throws Exception {
 		//For debug -> Para saber si podria llegar a ser mas de 21
 		if (aparcamientosOcupados > sizeParking)
 			throw new Exception("Ha superado el limite " + aparcamientosOcupados);
 		if (barrera > entradas.length)
 			throw new Exception("La barrera de entrada usada no existe (" + barrera + ")");
 		
-		System.out.println("El coche " + id + " va a intentar entrar en la barrera n=" + barrera);
+		System.out.println("El coche " + id + " va a intentar ENTRAR en la barrera n=" + barrera);
 		
 		entradas[barrera].entrar();
 		
-		return aparcamientosOcupados + " numero de permisos " + sEntrada.availablePermits();
+		return aparcamientosOcupados + ".";
 	}
 	
 	/**
@@ -88,21 +94,25 @@ public class Parking {
 	 * @throws Exception En caso de darse {@code #aparcamientosOcupados < 0}
 	 * 		   En caso de que {@code barrera > Parking#sEntrada} 
 	 */
-	public String salir(int barrera, int id) throws Exception {
+	public synchronized String salir(int barrera, int id) throws Exception {
+		//Guarda la ultima barrera a la que se la hecho release
+		int barreraRelase;
+		
 		//For debug -> Para saber si podria llegar a ser menos de 21
 		if (aparcamientosOcupados < 0)
 			throw new Exception("Error el aparcamiento es infrerior a 0 Valor=" + aparcamientosOcupados);
 		if (barrera > salidas.length)
 			throw new Exception("La barrera de salida no existe (" + barrera +")");
 		
-		System.out.println("El coche " + id + " va a salir por la barrera n=" + barrera);
+		System.out.println("El coche " + id + " va a SALIR por la barrera n=" + barrera);
 		
 		salidas[barrera].salida();
-		entradas[contador].release();
+		entradas[contador].unlock();
 		
+		barreraRelase = contador;
 		aumentarContador();
 		
-		return aparcamientosOcupados + " numero de permisos " + sEntrada.availablePermits();
+		return aparcamientosOcupados + ". Barrera de ENTRADA a la que se le da paso es " + barreraRelase;
 	}
 	
 	/**
@@ -123,9 +133,9 @@ public class Parking {
 	 * Aumenta el contador encargador de dar los permisos a las barreras conrrespondiente.
 	 * EJ: primero la n1, segundo la n2, tercero la n3, despues la 1 de nuevo y asi...
 	 */
-	private synchronized void aumentarContador() {
+	private void aumentarContador() {
 		contador++;
-		if (contador >= 2)
+		if (contador >= entradas.length)
 			contador = 0;
 	}
 	 
