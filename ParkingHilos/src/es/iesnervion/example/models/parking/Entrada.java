@@ -10,21 +10,25 @@ import java.util.concurrent.Semaphore;
 class Entrada {
 	private Semaphore s;
 	
+	/**
+	 * Constructor por el cual se introducira el semaforo Entrada generico de parking.
+	 * @param s
+	 */
 	protected Entrada(Semaphore s) {
 		this.s = s;
 	}
 	
 	/**
-	 * Retura un permiso simbolizando que hay 1 espacio menos
-	 * @throws InterruptedException
+	 * Hace un acquire al semaforo de entrada y llama a {@link Parking#addCar()}
+	 * @throws InterruptedException {@link InterruptedException}
 	 */
-	protected void entrada() throws InterruptedException {
+	protected void entrar() throws InterruptedException {
 		s.acquire();
 		Parking.addCar();
 	}
 	
 	/**
-	 * Libera un permiso, simbolizando que hay 1 espacio
+	 * Hace a {@link #s} un {@link Semaphore#release()}.
 	 */
 	protected void release(){
 		s.release();

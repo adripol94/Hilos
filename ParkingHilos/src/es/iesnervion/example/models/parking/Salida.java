@@ -10,17 +10,21 @@ import java.util.concurrent.Semaphore;
 class Salida {
 	private Semaphore s;
 	
-	
+	/**
+	 * Constructor por el cual se introducira el semaforo Salida generico de parking.
+	 * @param s
+	 */
 	Salida(Semaphore s) {
 		this.s = s;
 	}
 	
 	/**
-	 * El coche usa una salida y tras salir del todo la deja libre, tambien llama a Parking para reducir el contador.
+	 * El coche usa una salida y tras salir deja libre dicha salida, tambien llama a {@link Parking#outCar()} para decrementar el contador.
 	 * @throws InterruptedException
 	 */
 	protected void salida() throws InterruptedException {
 		s.acquire();
+		//Decrementacion del contador
 		Parking.outCar();
 		s.release();
 	}
