@@ -39,6 +39,10 @@ public class Supermercado {
 		
 	}
 	
+	/**
+	 * Numero de Cajeros que dispone el supermercado
+	 * @return
+	 */
 	public int numCajeros() {
 		return cajeros.length;
 	}
