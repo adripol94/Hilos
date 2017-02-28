@@ -23,7 +23,7 @@ public class Supermercado {
 		cajeros = new Cajero[numCajeros];
 		
 		for (int i=0; i < numCajeros; i++) {
-			cajeros[i] = new Cajero(i);
+			cajeros[i] = new Cajero(new Cola(i), i);
 			cajeros[i].start();
 		}
 	}
@@ -35,7 +35,7 @@ public class Supermercado {
 	 */
 	public synchronized void entrarEnCaja(Cliente c, int id) {
 		System.out.println("El usuario " + c.getId() + " va ha entrar en el cajero " + id);
-		cajeros[id].add(c);
+		cajeros[id].addToTail(c);
 		
 	}
 	
