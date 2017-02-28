@@ -37,21 +37,22 @@ public class Main {
 		System.out.println("indique el numero de clientes por minuto");
 		nClientes = in.nextInt();
 		
-		vecesGeneraraClientes = 1;
+		vecesGeneraraClientes = 0;
 		numClientGenerados = 0;
 		
 		supermercado = new Supermercado(nCajero);
 		
 		//Tiempo que correra el programa
-		tiempoDeVirtualizacion = (TIME_VIRTUALIZATION * 60) * 10;
+		tiempoDeVirtualizacion = (TIME_VIRTUALIZATION * 60) * 100;
 		
 		System.out.println("------------------------------------>ATENCION: Inicio de virtualizacion empezando");
 		
 		for (int i=0; i < tiempoDeVirtualizacion; i++) {
 			//Cuando i sea un minuto, EJ: 60 * 0 (La primera vez), 60 * 1 (Primer min), 60 * 2 (Segundo min).
 			if (i == (60 * vecesGeneraraClientes)) {
+				System.out.println("Genrando usuario " + i);
 				vecesGeneraraClientes++;
-				// Genera un numero n de clientes en ese minuto.
+				// Genera un numero n de clientes en ese minuto
 				for (int j=0; j < nClientes; j++) {
 					new Cliente(numClientGenerados, supermercado).start();
 					numClientGenerados++;

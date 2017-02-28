@@ -1,61 +1,70 @@
 package es.iesnervion.example.models.supermercado;
 
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import es.iesnervion.example.models.Cliente;
 
 /**
- * Cola protegida, es el metodo encargado de gestionar a cola de cada {@link Cajero}.
+ * Cola protegida, es el metodo encargado de gestionar a cola de cada
+ * {@link Cajero}.
+ * 
  * @author adripol94
  *
  */
 class Cola {
-	
-	/**
-	 * Cola de los clientes que estan en caja
-	 */
-	private LinkedList<Cliente> registro;
-	
-	/**
-	 * Indetificador de la cola, referente al cajero.
-	 */
+	private LinkedList<Cliente> tail;
+	private Cajero cajero;
 	private int id;
-	
-	/**
-	 * Inicializacion del identificador de la Cola.
-	 * @param id Indeficiador de {@link Cajero}.
-	 */
+
 	protected Cola(int id) {
 		this.id = id;
-		registro = new LinkedList<>();
+		tail = new LinkedList<Cliente>();
 	}
 	
-	/**
-	 * Introducira el cliente en la ultima posicion.
-	 * @param c
-	 */
-	protected void add(Cliente c) {
-		registro.addFirst(c);
+	protected void asignarCajero(Cajero cajero) {
+		this.cajero = cajero;
 	}
-	
-	/**
-	 * Devuelve el ultimo cliente de la lista y lo elimina.
-	 * @return
-	 */
-	protected Cliente get() {
-		Cliente c = registro.getLast();
-		System.out.println("Se ha cogido el cliente " + id + " de la cola");
-		registro.removeLast();
+
+	protected void addClientToTail(Cliente c) throws Exception {
+		if (cajero == null)
+			throw new Exception("No se le ha asigando la cola a un CAJERO");
 		
-		return c;
+		System.out.println("Cliente " + c.getId() + " se va ha añadir a la cola " + id);
+		addToTail(c);
+		cajero.notifyAll();
+	}
+
+	protected Cliente atenderClient() {
+		Cliente c;
+//		if (tail.isEmpty()) {
+//			try {
+//				System.out.println("----------------------------------------------------> Cola " + id + " vacia!!!!!!");
+//				wait();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		} else {
+			c = tail.getLast();
+			System.out.println(
+					"Cliente " + c.getId() + " va a cobrar en la caja " + id + " GENTE EN COLA = " + tail.size());
+			remove();
+			return c;
+//		}
+	}
+
+	private void remove() {
+		tail.removeLast();
+	}
+
+	private void addToTail(Cliente c) {
+		tail.addFirst(c);
+		System.out.println("Cliente " + c.getId() + " se ha añadido a la cola " + id);
 	}
 	
-	protected boolean isEmpty() {
-		return registro.isEmpty();
+	protected boolean vacia() {
+		return tail.isEmpty();
 	}
-	
-	protected int size() {
-		return registro.size();
-	}
+
 }
