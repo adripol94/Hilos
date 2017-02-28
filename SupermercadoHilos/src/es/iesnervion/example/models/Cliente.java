@@ -53,10 +53,9 @@ public class Cliente extends Thread {
 	private int nCajero;
 
 	/**
-	 * Constructor del cliente.
-	 * 
-	 * @param id
-	 *            Identificador del cliente.
+	 * Constructor de Cliente, obtiene un identificador y el objeto supermercado para moverse por este
+	 * @param id Identificado
+	 * @param conductor Supermercado
 	 */
 	public Cliente(int id, Supermercado conductor) {
 		this.id = id;
